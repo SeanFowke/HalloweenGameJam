@@ -1,0 +1,14 @@
+{
+	"Targets": [
+		{
+			"Name": "HalloweenGameJam",
+			"Path": "C:\\Users\\SeanF\\Desktop\\HalloweenGameJam\\HalloweenGameJam\\HalloweenGameJam\\HalloweenGameJam\\Source\\HalloweenGameJam.Target.cs",
+			"Type": "Game"
+		},
+		{
+			"Name": "HalloweenGameJamEditor",
+			"Path": "C:\\Users\\SeanF\\Desktop\\HalloweenGameJam\\HalloweenGameJam\\HalloweenGameJam\\HalloweenGameJam\\Source\\HalloweenGameJamEditor.Target.cs",
+			"Type": "Editor"
+		}
+	]
+}

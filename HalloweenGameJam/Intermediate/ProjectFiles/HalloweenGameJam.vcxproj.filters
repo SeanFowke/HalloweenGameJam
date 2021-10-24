@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <None Include="..\..\HalloweenGameJam.uproject" />
+    <Filter Include="Source">
+      <UniqueIdentifier>{9231B234-AA51-446A-91D7-0DF6C58D459A}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Source\HalloweenGameJam.Target.cs">
+      <Filter>Source</Filter>
+    </None>
+    <None Include="..\..\Source\HalloweenGameJamEditor.Target.cs">
+      <Filter>Source</Filter>
+    </None>
+    <Filter Include="Config">
+      <UniqueIdentifier>{E418AE94-9EE7-4495-A675-8722AE1F7E5E}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Config\DefaultEditor.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultEditorPerProjectUserSettings.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultEngine.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultGame.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultInput.ini">
+      <Filter>Config</Filter>
+    </None>
+    <Filter Include="Source\HalloweenGameJam">
+      <UniqueIdentifier>{FC20F28A-6B7C-4E15-B1D4-3C40FCC2911E}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Source\HalloweenGameJam\HalloweenGameJam.Build.cs">
+      <Filter>Source\HalloweenGameJam</Filter>
+    </None>
+    <ClCompile Include="..\..\Source\HalloweenGameJam\HalloweenGameJam.cpp">
+      <Filter>Source\HalloweenGameJam</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\HalloweenGameJam\HalloweenGameJam.h">
+      <Filter>Source\HalloweenGameJam</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\HalloweenGameJam\HalloweenGameJamCharacter.cpp">
+      <Filter>Source\HalloweenGameJam</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\HalloweenGameJam\HalloweenGameJamCharacter.h">
+      <Filter>Source\HalloweenGameJam</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\HalloweenGameJam\HalloweenGameJamGameMode.cpp">
+      <Filter>Source\HalloweenGameJam</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\HalloweenGameJam\HalloweenGameJamGameMode.h">
+      <Filter>Source\HalloweenGameJam</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
