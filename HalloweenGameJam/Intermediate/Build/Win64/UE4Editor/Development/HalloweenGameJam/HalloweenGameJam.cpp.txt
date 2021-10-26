@@ -1,2 +1,0 @@
-C:\Users\SeanF\Desktop\HalloweenGameJam\HalloweenGameJam\HalloweenGameJam\HalloweenGameJam\Intermediate\Build\Win64\UE4Editor\Development\HalloweenGameJam\Definitions.HalloweenGameJam.h
-C:\Users\SeanF\Desktop\HalloweenGameJam\HalloweenGameJam\HalloweenGameJam\HalloweenGameJam\Source\HalloweenGameJam\HalloweenGameJam.h
