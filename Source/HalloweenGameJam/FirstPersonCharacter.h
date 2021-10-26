@@ -25,22 +25,11 @@ public:
 		class USkeletalMeshComponent* FP_Gun;*/
 
 		/** Location on gun mesh where projectiles should spawn. */
-		UPROPERTY(EditAnywhere, Category = HiddenObject)
-		class UHiddenObjectComponent* hiddenObjectComp;
-
-	UPROPERTY(EditAnywhere, Category = SceneCapture2D)
-		class USceneCaptureComponent2D* sceneCapture;
-
-	UPROPERTY(EditAnywhere, Category = MirrorMesh)
-		class UStaticMeshComponent* mirrorMesh;
 
 
 
 	UPROPERTY(EditAnywhere, Category = Sound)
 		class UAudioComponent* audioComp;
-
-	UPROPERTY(EditAnywhere)
-		class UAIPerceptionStimuliSourceComponent* perceptionStimuliSource;
 
 	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
 		class USceneComponent* FP_MuzzleLocation;
@@ -49,21 +38,11 @@ public:
 	/*UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
 	class USkeletalMeshComponent* VR_Gun;*/
 
-	/** Location on VR gun mesh where projectiles should spawn. */
-	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
-		class USceneComponent* VR_MuzzleLocation;
 
 	/** First person camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 		class UCameraComponent* FirstPersonCameraComponent;
 
-	/** Motion controller (right hand) */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-		class UMotionControllerComponent* R_MotionController;
-
-	/** Motion controller (left hand) */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-		class UMotionControllerComponent* L_MotionController;
 
 	void SetSideScrollerRef(class AHalloweenGameJamCharacter* character_);
 
@@ -115,10 +94,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 		FVector GunOffset;
 
-	/** Projectile class to spawn */
-	UPROPERTY(EditDefaultsOnly, Category = Projectile)
-		TSubclassOf<class AThoseWhoRemainProjectile> ProjectileClass;
-
 	/** Sound to play each time we fire */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 		class USoundBase* FireSound;
@@ -135,9 +110,6 @@ protected:
 
 	/** Fires a projectile. */
 	void OnFire();
-
-	void OnRaiseMirror();
-	void OnLowerMirror();
 
 	void OnSprint();
 	void OnWalk();
@@ -173,9 +145,9 @@ protected:
 		FVector Location;
 		bool bMoved;
 	};
-	void BeginTouch(const ETouchIndex::Type FingerIndex, const FVector Location);
-	void EndTouch(const ETouchIndex::Type FingerIndex, const FVector Location);
-	void TouchUpdate(const ETouchIndex::Type FingerIndex, const FVector Location);
+	//void BeginTouch(const ETouchIndex::Type FingerIndex, const FVector Location);
+	//void EndTouch(const ETouchIndex::Type FingerIndex, const FVector Location);
+	//void TouchUpdate(const ETouchIndex::Type FingerIndex, const FVector Location);
 	TouchData	TouchItem;
 
 protected:
@@ -189,7 +161,7 @@ protected:
 	 * @param	InputComponent	The input component pointer to bind controls to
 	 * @returns true if touch controls were enabled.
 	 */
-	bool EnableTouchscreenMovement(UInputComponent* InputComponent);
+	//bool EnableTouchscreenMovement(UInputComponent* InputComponent);
 
 public:
 	/** Returns Mesh1P subobject **/

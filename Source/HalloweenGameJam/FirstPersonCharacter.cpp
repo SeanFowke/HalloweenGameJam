@@ -11,6 +11,10 @@ AFirstPersonCharacter::AFirstPersonCharacter()
 
 }
 
+void AFirstPersonCharacter::SetSideScrollerRef(AHalloweenGameJamCharacter* character_)
+{
+}
+
 // Called when the game starts or when spawned
 void AFirstPersonCharacter::BeginPlay()
 {
@@ -25,6 +29,26 @@ void AFirstPersonCharacter::Tick(float DeltaTime)
 
 }
 
+void AFirstPersonCharacter::OnOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+}
+
+void AFirstPersonCharacter::MoveForward(float Val)
+{
+}
+
+void AFirstPersonCharacter::MoveRight(float Val)
+{
+}
+
+void AFirstPersonCharacter::TurnAtRate(float Rate)
+{
+}
+
+void AFirstPersonCharacter::LookUpAtRate(float Rate)
+{
+}
+
 // Called to bind functionality to input
 void AFirstPersonCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -32,3 +56,23 @@ void AFirstPersonCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 
 }
 
+void AFirstPersonCharacter::OnFire()
+{
+
+}
+
+void AFirstPersonCharacter::OnSprint()
+{
+}
+
+void AFirstPersonCharacter::OnWalk()
+{
+}
+
+void AFirstPersonCharacter::OnInteract()
+{
+}
+
+void AFirstPersonCharacter::OnResetVR()
+{
+}
