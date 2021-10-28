@@ -8,10 +8,9 @@
 #include "Components/InputComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
-#include "Abilities/MovementAbilities/JumpAbility.h"
-#include "Abilities/MovementAbilities/MoveAbility.h"
-#include "Abilities/PassiveAbilities/DefenceAbility.h"
-#include "Abilities/PassiveAbilities/HealthAbility.h"
+
+#include "Interactable.h"
+#include "Sacrifice/SacrificeAlter.h"
 
 
 AHalloweenGameJamCharacter::AHalloweenGameJamCharacter()
@@ -23,6 +22,14 @@ AHalloweenGameJamCharacter::AHalloweenGameJamCharacter()
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationRoll = false;
+
+	interactCapsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("InteractCapsule"));
+	interactCapsule->InitCapsuleSize(42.f, 96.0f);
+	interactCapsule->SetCollisionProfileName(TEXT("Trigger"));
+	interactCapsule->SetupAttachment(RootComponent);
+
+	interactCapsule->OnComponentBeginOverlap.AddDynamic(this, &AHalloweenGameJamCharacter::OnOverlapBegin);
+	interactCapsule->OnComponentEndOverlap.AddDynamic(this, &AHalloweenGameJamCharacter::OnOverlapEnd);
 
 	// Create a camera boom attached to the root (capsule)
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
@@ -60,6 +67,9 @@ AHalloweenGameJamCharacter::AHalloweenGameJamCharacter()
 	healthAbility = CreateDefaultSubobject<UHealthAbility>(TEXT("HealthAbility"));
 	healthAbility->SetPlayerCharacter(this);
 
+	//attackAbility = CreateDefaultSubobject<UAttackAbility>(TEXT("AttackAbility"));
+	//attackAbility->SetPlayerCharacter(this);
+
 	defenceStat = 100.0f;
 	healthStat = 150.0f;
 
@@ -67,30 +77,104 @@ AHalloweenGameJamCharacter::AHalloweenGameJamCharacter()
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
 }
 
+
+
+
 //////////////////////////////////////////////////////////////////////////
 // Input
 
 void AHalloweenGameJamCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
 	// set up gameplay key bindings
-	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AHalloweenGameJamCharacter::PlayerJump);
+	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AHalloweenGameJamCharacter::Interact);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AHalloweenGameJamCharacter::MoveRight);
-
-
+	
 }
 
 void AHalloweenGameJamCharacter::MoveRight(float Value)
 {
-	moveAbility->Invoke();
+	//moveAbility->Invoke();
 	// add movement in that direction
 	AddMovementInput(FVector(0.f, -1.f, 0.f), Value);
 }
 void AHalloweenGameJamCharacter::PlayerJump() {
 
-	jumpAbility->Invoke();
-	ACharacter::Jump();
+	//jumpAbility->Invoke();
+	//ACharacter::Jump();
 }
+
+void AHalloweenGameJamCharacter::Interact()
+{
+	if (interactableInRange && !isInteracting) {
+		isInteracting = true;
+	}
+
+	else {
+		isInteracting = false;
+	}
+}
+
+void AHalloweenGameJamCharacter::OnOverlapBegin(UPrimitiveComponent* OverLappedComp, AActor* otherActor, UPrimitiveComponent* otherComp, int32 otherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if (otherActor && (otherActor != this) && otherComp) {
+
+		if (AInteractable* Iobj = Cast<AInteractable>(otherActor)) {
+			interactableInRange = true;
+
+			if (ASacrificeAlter* alter = Cast<ASacrificeAlter>(Iobj)) {
+				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Overlap Began with : " + Iobj->GetName()));
+			}
+		}
+	}									
+}
+
+void AHalloweenGameJamCharacter::OnOverlapEnd(UPrimitiveComponent* overLappedComp, AActor* otherActor, UPrimitiveComponent* otherComp, int32 otherBodyIndex)
+{
+	if (AInteractable* Iobj = Cast<AInteractable>(otherActor)) {
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Overlap Ended with : " + Iobj->GetName()));
+		interactableInRange = false;
+		isInteracting = false;
+	}
+}
+
+void AHalloweenGameJamCharacter::SetDefenceStat(float value)
+{
+	defenceStat = value;
+}
+
+float AHalloweenGameJamCharacter::GetDefenceStat()
+{
+	return defenceStat;
+}
+
+void AHalloweenGameJamCharacter::SetHealthStat(float value)
+{
+	healthStat = value;
+}
+
+float AHalloweenGameJamCharacter::GetHealthStat()
+{
+	return healthStat;
+}
+
+void AHalloweenGameJamCharacter::AddAbility(UAbilitiesBase* ability)
+{
+	playerAbilities.Add(ability);
+}
+
+TArray<UAbilitiesBase*> AHalloweenGameJamCharacter::GetAbilities()
+{
+	return playerAbilities;
+}
+
+bool AHalloweenGameJamCharacter::GetIsInteracting()
+{
+	return isInteracting;
+}
+
+
 
 
 

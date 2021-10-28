@@ -26,7 +26,7 @@ void UJumpAbility::BeginPlay()
 {
 	UMovementAbilitiesBase::BeginPlay();
 	SetOrigValue(GetPlayerCharacter()->GetCharacterMovement()->JumpZVelocity);
-	GetPlayerCharacter()->AddAbility(this);
+	SetName("Jump Ability");
 }
 
 void UJumpAbility::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)

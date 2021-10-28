@@ -20,6 +20,7 @@ void UMoveAbility::BeginPlay()
 {
 	UMovementAbilitiesBase::BeginPlay();
 	SetOrigValue(GetPlayerCharacter()->GetCharacterMovement()->MaxWalkSpeed);
+	SetName("Move Ability");
 
 }
 

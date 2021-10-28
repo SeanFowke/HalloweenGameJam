@@ -13,6 +13,7 @@ void UHealthAbility::BeginPlay()
 	UPassiveAbilitiesBase::BeginPlay();
 	SetOrigStat(GetPlayerCharacter()->GetHealthStat());
 	SetStatMultiplyer(75.0f);
+	SetName("Health Ability");
 }
 
 void UHealthAbility::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)

@@ -2,37 +2,89 @@
 
 
 #include "SacrificeAlter.h"
-#include "Math/Vector.h"
-#include "../HalloweenGameJamCharacter.h"
+#include "../Abilities/MovementAbilities/JumpAbility.h"
+#include "../Abilities/MovementAbilities/MoveAbility.h"
+
+#include "../Abilities/PassiveAbilities/DefenceAbility.h"
+#include "../Abilities/PassiveAbilities/HealthAbility.h"
+
 
 // Sets default values
 ASacrificeAlter::ASacrificeAlter()
-{
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
-	playerCharacter = nullptr;
-	distanceFromPlayer = -1.0f;
-	playerInRange = false;
+{	
+	maxAmtOfActAbl = 3;
+	numOfMoveAbl   = 0;
+	numOfPassAbl   = 0;
+	numOfComAbl    = 0;
+
+	alterMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("AlterMesh"));
+	sacrificeUI = CreateDefaultSubobject<UWidgetComponent>(TEXT("SacrificeUI"));
+
 
 }
 
 // Called when the game starts or when spawned
 void ASacrificeAlter::BeginPlay()
 {
-	Super::BeginPlay();
-	playerCharacter = Cast<AHalloweenGameJamCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	AInteractable::BeginPlay();
+	SetName("Sacrifice Alter");
+
+	sacrificeUI->GetUserWidgetObject()->AddToViewport();
+
+	allAbilities = GetPlayerCharacter()->GetAbilities();
+
+	for (int i = 0; i < allAbilities.Num(); ++i) {
+
+		if (allAbilities[i]->GetIsActivated()) {
+			activeAbilities.Add(allAbilities[i]);
+		}
+		else {
+			deactiveAbilities.Add(allAbilities[i]);
+		}
+	}
 }
+
+
 
 // Called every frame
 void ASacrificeAlter::Tick(float DeltaTime)
 {
-	Super::Tick(DeltaTime);
-	GetDistantToPlayer();
+	AInteractable::Tick(DeltaTime);
+	sacrificeUI->SetVisibility(false);
+
+	if (GetPlayerCharacter()->GetIsInteracting()) {
+		sacrificeUI->GetUserWidgetObject()->SetVisibility(ESlateVisibility::Visible);
+	}
+	else {
+		sacrificeUI->GetUserWidgetObject()->SetVisibility(ESlateVisibility::Hidden);
+	}
 }
 
-void ASacrificeAlter::GetDistantToPlayer()
+
+
+void ASacrificeAlter::Interact()
 {
-	float tmp = GetActorLocation().Y - playerCharacter->GetActorLocation().Y;
-	distanceFromPlayer = FMath::Abs(tmp);
 }
+
+void ASacrificeAlter::OpenUI()
+{
+	
+}
+
+void ASacrificeAlter::SetActiveAbilites()
+{
+	//check how many active Abilities there are 
+	if (activeAbilities.Num() == maxAmtOfActAbl) {
+
+	}
+}
+
+void ASacrificeAlter::SetActiveAbilitiesText(FString movementAby, FString passiveAby, FString combatAby)
+{
+	//movementAby = 
+}
+
+
+
+
 

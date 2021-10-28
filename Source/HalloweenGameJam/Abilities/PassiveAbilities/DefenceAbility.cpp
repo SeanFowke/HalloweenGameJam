@@ -8,6 +8,7 @@ void UDefenceAbility::BeginPlay()
 	UPassiveAbilitiesBase::BeginPlay();
 	SetOrigStat(GetPlayerCharacter()->GetDefenceStat());
 	SetStatMultiplyer(75.0f);
+	SetName("Defence Ability");
 }
 
 void UDefenceAbility::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
