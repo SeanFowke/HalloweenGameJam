@@ -74,6 +74,8 @@ protected:
 	float healthStat;
 
 	virtual void BeginPlay();
+	virtual void Tick(float DeltaTime);
+
 
 
 	class AFirstPersonCharacter* fpsRef;
@@ -97,6 +99,7 @@ public:
 	UAbilitiesBase* GetAbility(TArray<UAbilitiesBase*> abilityArray_,FString name_);
 
 	bool GetIsInteracting();
+	inline void SetIsInterActing(bool isInteracting_) { isInteracting = isInteracting_; }
 
 	/** Returns SideViewCameraComponent subobject **/
 	FORCEINLINE class UCameraComponent* GetSideViewCameraComponent() const { return SideViewCameraComponent; }

@@ -146,6 +146,19 @@ void AHalloweenGameJamCharacter::BeginPlay()
 	GetWorld()->GetTimerManager().SetTimer(delayedBeginPlay, this, &AHalloweenGameJamCharacter::ExitTVView, 0.1f, false);
 }
 
+void AHalloweenGameJamCharacter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	if (isInteracting) {
+		canJump = false;
+		moveY = 0.0f;
+	}
+	else {
+		canJump = true;
+		moveY = -1.0f;
+	}
+}
+
 void AHalloweenGameJamCharacter::MoveRight(float Value)
 {
 	AddMovementInput(FVector(0.f, moveY, 0.f), Value);
@@ -161,15 +174,15 @@ void AHalloweenGameJamCharacter::Interact()
 {
 	if (interactableInRange && !isInteracting) {
 		isInteracting = true;
-		canJump = false;
-		moveY = 0.0f;
+		
 	}
 
 	else {
 		isInteracting = false;
-		canJump = true;
-		moveY = -1.0f;
+		
 	}
+
+	
 }
 
 void AHalloweenGameJamCharacter::OnOverlapBegin(UPrimitiveComponent* OverLappedComp, AActor* otherActor, UPrimitiveComponent* otherComp, int32 otherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)

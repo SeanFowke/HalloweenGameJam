@@ -11,10 +11,6 @@
 // Sets default values
 ASacrificeAlter::ASacrificeAlter()
 {	
-	maxAmtOfActAbl = 3;
-	numOfMoveAbl   = 0;
-	numOfPassAbl   = 0;
-	numOfComAbl    = 0;
 
 	alterMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("AlterMesh"));
 	sacrificeUI = CreateDefaultSubobject<UWidgetComponent>(TEXT("SacrificeUI"));
@@ -38,11 +34,13 @@ void ASacrificeAlter::Tick(float DeltaTime)
 
 	if (GetPlayerCharacter()->GetIsInteracting()) {
 		sacrificeUI->GetUserWidgetObject()->SetVisibility(ESlateVisibility::Visible);
-		GetPlayerCharacter()->GetPlyController()->SetShowMouseCursor(true);
+		GetPlayerCharacter()->GetPlyController()->SetShowMouseCursor(true); 
 	}
 	else {
 		sacrificeUI->GetUserWidgetObject()->SetVisibility(ESlateVisibility::Hidden);
 		GetPlayerCharacter()->GetPlyController()->SetShowMouseCursor(false);
+		newSwapAbility = nullptr;
+		oldSwapAbility = nullptr;
 	}
 
 	if (allAbilities.Num() <= 0) {
@@ -69,45 +67,7 @@ void ASacrificeAlter::SetActiveAbilites()
 	for (int i = 0; i < allAbilities.Num(); ++i) {
 
 		if (allAbilities[i]->GetIsActivated()) {
-
-			if (UMovementAbilitiesBase* mAbl = Cast<UMovementAbilitiesBase>(allAbilities[i])) {
-
-				if (numOfMoveAbl <= 0) {
-					eMoveAbility = mAbl; 
-					eMoveAbility->Invoke();
-					numOfMoveAbl += 1;
-				}
-
-				else {
-					continue;
-				}
-			}
-
-			else if(UPassiveAbilitiesBase* pAbl = Cast<UPassiveAbilitiesBase>(allAbilities[i])) {
-
-				if (numOfPassAbl <= 0) {
-					ePassiveAbility = pAbl;
-					ePassiveAbility->Invoke();
-					numOfPassAbl += 1;
-				}
-
-				else {
-					continue;
-				}
-			}
-
-			else if (UCombatAbilitiesBase* cAbl = Cast<UCombatAbilitiesBase>(allAbilities[i])) {
-
-				if (numOfComAbl <= 0) {
-					eCombatAbility = cAbl;
-					eCombatAbility->Invoke();
-					numOfComAbl += 1;
-				}
-
-				else {
-					continue;
-				}
-			}
+			activeAbilities.Add(allAbilities[i]);
 		}
 	}
 }
@@ -123,161 +83,59 @@ void ASacrificeAlter::SetInactiveAbilites()
 	}
 }
 
-void ASacrificeAlter::removeAbility(FString abilityName_)
+void ASacrificeAlter::removeAbility(TArray<UAbilitiesBase*> abilityArray,FString abilityName_)
 {
 	UAbilitiesBase* toRemove;
-	for (int i = 0; i < inactiveAbilities.Num(); ++i) {
-		if (abilityName_ == inactiveAbilities[i]->GetName()) {
-			toRemove = inactiveAbilities[i];
+	for (int i = 0; i < abilityArray.Num(); ++i) {
+		if (abilityName_ == abilityArray[i]->GetName()) {
+			toRemove = abilityArray[i];
 			break;
 		}
 	}
 
-	inactiveAbilities.Remove(toRemove);
+	abilityArray.Remove(toRemove);
 }
 
-FString ASacrificeAlter::SetMoveAbilityText()
+void ASacrificeAlter::SetNewAbility(UTextBlock* textBox)
 {
-	return eMoveAbility->GetName();
-}
-
-FString ASacrificeAlter::SetPassAbilityText()
-{
-	return ePassiveAbility->GetName();
-}
-
-FString ASacrificeAlter::SetCombAbilityText()
-{
-	return  eCombatAbility->GetName();
-}
-
-void ASacrificeAlter::SetMovementButtons(TArray<UTextBlock*> buttonTxt)
-{
-	for (int i = 0; i < buttonTxt.Num(); ++i) {
-
-		for (int j = 0; j < inactiveAbilities.Num(); ++j) {
-
-			if (UMovementAbilitiesBase* mAbl = Cast<UMovementAbilitiesBase>(inactiveAbilities[j]))
-			{
-				if (i <= 0) {
-					buttonTxt[i]->SetText(FText::FromString(mAbl->GetName()));
-				}
-
-				else{
-					if (buttonTxt[i - 1]->GetText().ToString() == mAbl->GetName()) {
-						continue;
-					}
-				}
-				
-			}
-		}
+	if (!newSwapAbility) {
+		int randNum = FMath::RandRange(0, inactiveAbilities.Num() - 1);
+		newSwapAbility = inactiveAbilities[randNum];
+		textBox->SetText(FText::FromString(newSwapAbility->GetName()));
 	}
 }
 
-void ASacrificeAlter::SetPassiveButtons(TArray<UTextBlock*> buttonTxt)
+void ASacrificeAlter::OldSwapAbility(UTextBlock* textBox)			
 {
-
-	for (int i = 0; i < buttonTxt.Num(); ++i) {
-		for (int j = 0; j < inactiveAbilities.Num(); ++j) {
-
-			if (UPassiveAbilitiesBase* pAbl = Cast<UPassiveAbilitiesBase>(inactiveAbilities[j]))
-			{
-				if (i <= 0) {
-					buttonTxt[i]->SetText(FText::FromString(pAbl->GetName()));
-				}
-
-				else {
-					if (buttonTxt[i - 1]->GetText().ToString() == pAbl->GetName()) {
-						continue;
-					}
-				}
-			}
-		}
+	if (!oldSwapAbility) {
+		int randNum = FMath::RandRange(0, activeAbilities.Num() - 1);
+		oldSwapAbility = activeAbilities[randNum];
+		textBox->SetText(FText::FromString(oldSwapAbility->GetName()));
 	}
 }
 
-void ASacrificeAlter::SetCombatButtons(TArray<UTextBlock*> buttonTxt)
+void ASacrificeAlter::OkButton()
 {
-	for (int i = 0; i < buttonTxt.Num(); ++i) {
-		for (int j = 0; j < inactiveAbilities.Num(); ++j) {
+	if (oldSwapAbility && newSwapAbility) {
 
-			if (UCombatAbilitiesBase* cAbl = Cast<UCombatAbilitiesBase>(inactiveAbilities[j]))
-			{
-				if (i <= 0) {
-					buttonTxt[i]->SetText(FText::FromString(cAbl->GetName()));
-				}
+		removeAbility(inactiveAbilities,newSwapAbility->GetName());
+		activeAbilities.Add(newSwapAbility);
 
-				else {
-					if (buttonTxt[i - 1]->GetText().ToString() == cAbl->GetName()) {
-						continue;
-					}
-				}
-			}
+		removeAbility(activeAbilities, oldSwapAbility->GetName());
+		inactiveAbilities.Add(oldSwapAbility);
 
-		}
+		oldSwapAbility->SetIsActivated(false);
+		oldSwapAbility->Invoke();
+
+		newSwapAbility->SetIsActivated(true);
+		newSwapAbility->Invoke();
+
+		GetPlayerCharacter()->SetIsInterActing(false);
 	}
-
 }
 
-void ASacrificeAlter::OnButtonClicked(UTextBlock* buttonTxt)
+void ASacrificeAlter::CancelButton()
 {
-	
-	if (UAbilitiesBase* abl = Cast<UAbilitiesBase>(GetPlayerCharacter()->GetAbility(inactiveAbilities, buttonTxt->GetText().ToString()))) {
-		//Do Check to see what ability type it is 
-		//UAbilitiesBase* abl = GetPlayerCharacter()->GetAbility(inactiveAbilities, buttonTxt->GetText().ToString());
-		 //remove ability from inactive list
-
-		if (UMovementAbilitiesBase* mAbl = Cast<UMovementAbilitiesBase>(abl)) {
-			removeAbility(abl->GetName());
-
-			eMoveAbility->SetIsActivated(false);
-
-			//call invoke to set get rid of stat boost 
-			eMoveAbility->Invoke();
-
-			inactiveAbilities.Add(eMoveAbility);
-
-			eMoveAbility = (UMovementAbilitiesBase*)mAbl;
-			eMoveAbility->SetIsActivated(true);
-			eMoveAbility->Invoke();
-		}
-
-		else if (UPassiveAbilitiesBase* pAbl = Cast<UPassiveAbilitiesBase>(abl)) {
-			removeAbility(pAbl->GetName());
-
-			ePassiveAbility->SetIsActivated(false);
-
-			//call invoke to set get rid of stat boost 
-			ePassiveAbility->Invoke();
-
-			inactiveAbilities.Add(ePassiveAbility);
-
-			ePassiveAbility = (UPassiveAbilitiesBase*)pAbl;
-			ePassiveAbility->SetIsActivated(true);
-			ePassiveAbility->Invoke();
-		}
-
-		else if (UCombatAbilitiesBase* cAbl = Cast<UCombatAbilitiesBase>(abl)) {
-			removeAbility(cAbl->GetName());
-
-			eCombatAbility->SetIsActivated(false);
-
-			//call invoke to set get rid of stat boost 
-			eCombatAbility->Invoke();
-
-			inactiveAbilities.Add(ePassiveAbility);
-
-			eCombatAbility = (UCombatAbilitiesBase*)cAbl;
-			eCombatAbility->SetIsActivated(true);
-			eCombatAbility->Invoke();
-		}
-	}
-	else {
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Button Clicked"));
-	}
-	
+	GetPlayerCharacter()->SetIsInterActing(false);
 }
-
-
-
 

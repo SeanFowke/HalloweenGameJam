@@ -16,20 +16,6 @@ class HALLOWEENGAMEJAM_API ASacrificeAlter : public AInteractable
 {
 	GENERATED_BODY()
 
-	//Max number of Active Abilities
-	int maxAmtOfActAbl;
-
-	//number of movement Abilites
-	int numOfMoveAbl;
-
-	//number of Passive Abilities	
-	int numOfPassAbl;
-
-	//number of combat abilities
-	int numOfComAbl;
-
-
-
 	UPROPERTY(VisibleAnywhere)
 	TArray<class UAbilitiesBase*> activeAbilities;
 
@@ -49,8 +35,6 @@ public:
 
 	UPROPERTY(VisibleAnywhere)
 	TArray<class UAbilitiesBase*> allAbilities;
-	
-
 
 protected:
 	// Called when the game starts or when spawned
@@ -62,43 +46,27 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Mesh)
 	UStaticMeshComponent* alterMesh;
 
-	// equipped Abilities
-	UPROPERTY(VisibleAnywhere)
-	class UMovementAbilitiesBase* eMoveAbility;
+	class UAbilitiesBase* newSwapAbility;
+	class UAbilitiesBase* oldSwapAbility;
 
-	UPROPERTY(VisibleAnywhere)
-	class UPassiveAbilitiesBase* ePassiveAbility;
 
-	UPROPERTY(VisibleAnywhere)
-	class UCombatAbilitiesBase* eCombatAbility;
-
-	void removeAbility(FString abilityName_);
+	void removeAbility(TArray<UAbilitiesBase*> abilityArray, FString abilityName_);
 
 
 public:	
  // UI Functions
 
 	UFUNCTION(BlueprintCallable)
-		FString SetMoveAbilityText(/*FString movementAby, FString passiveAby, FString combatAby*/);
+		void SetNewAbility(UTextBlock* textBox/*description at some point*/);
 
 	UFUNCTION(BlueprintCallable)
-		FString SetPassAbilityText(/*FString movementAby, FString passiveAby, FString combatAby*/);
+		void OldSwapAbility(UTextBlock* textBox);
 
 	UFUNCTION(BlueprintCallable)
-		FString SetCombAbilityText(/*FString movementAby, FString passiveAby, FString combatAby*/);
+		void OkButton();
 
 	UFUNCTION(BlueprintCallable)
-		void SetMovementButtons(TArray<UTextBlock*> buttonTxt);
-
-	UFUNCTION(BlueprintCallable)
-		void SetPassiveButtons(TArray<UTextBlock*> buttonTxt);
-
-	UFUNCTION(BlueprintCallable)
-		void SetCombatButtons(TArray<UTextBlock*> buttonTxt);
-
-	UFUNCTION(BlueprintCallable)
-		void OnButtonClicked(UTextBlock* buttonTxt);
-	
+		void CancelButton();
 	
 
 };
