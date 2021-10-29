@@ -5,6 +5,11 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Abilities/AbilitiesBase.h"
+#include "Abilities/MovementAbilities/JumpAbility.h"
+#include "Abilities/MovementAbilities/MoveAbility.h"
+#include "Abilities/PassiveAbilities/DefenceAbility.h"
+#include "Abilities/PassiveAbilities/HealthAbility.h"
+#include "Abilities/CombatAbilities/AttackAbility.h"
 #include "HalloweenGameJamCharacter.generated.h"
 
 
@@ -32,18 +37,34 @@ class AHalloweenGameJamCharacter : public ACharacter
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Ability, meta = (AllowPrivateAccess = "true"))
 	class UHealthAbility* healthAbility;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Ability, meta = (AllowPrivateAccess = "true"))
+	class UAttackAbility* attackAbility;
 	
 	UPROPERTY(VisibleAnywhere)
 	TArray<UAbilitiesBase*> playerAbilities;
+
+	UPROPERTY(VisibleAnywhere)
+	class UCapsuleComponent* interactCapsule;
+
+	UPROPERTY(VisibleAnywhere)
+	bool isInteracting;
+
+	UPROPERTY(VisibleAnywhere)
+	bool interactableInRange;
 
 protected:
 
 	/** Called for side to side input */
 	void MoveRight(float Val);
 	void PlayerJump();
+	void Interact(); 
+	float moveY;
+	bool canJump;
 
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
+	virtual void BeginPlay()override;
 
 	UPROPERTY(VisibleAnywhere)
 	float defenceStat;
@@ -60,11 +81,19 @@ protected:
 public:
 	AHalloweenGameJamCharacter();
 	
-	inline void SetDefenceStat(float value) { defenceStat = value; }
-	inline float GetDefenceStat() { return defenceStat; }
+	void SetDefenceStat(float value);
+	float GetDefenceStat();
 
-	inline void SetHealthStat(float value) { healthStat = value; }
-	inline float GetHealthStat() { return healthStat; }
+	void SetHealthStat(float value);
+	float GetHealthStat();
+
+	APlayerController* GetPlyController();
+
+	void AddAbility(UAbilitiesBase* ability);
+	TArray<UAbilitiesBase*> GetAbilities();
+	UAbilitiesBase* GetAbility(TArray<UAbilitiesBase*> abilityArray_,FString name_);
+
+	bool GetIsInteracting();
 
 	/** Returns SideViewCameraComponent subobject **/
 	FORCEINLINE class UCameraComponent* GetSideViewCameraComponent() const { return SideViewCameraComponent; }
@@ -79,4 +108,10 @@ public:
 
 	class AFirstPersonCharacter* getFpsCharacter();
 	inline void AddAbility(UAbilitiesBase* ability) { playerAbilities.Add(ability); }
+	UFUNCTION()
+	void OnOverlapBegin(UPrimitiveComponent* OverLappedComp, AActor* otherActor, UPrimitiveComponent* otherComp,
+						int32 otherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	UFUNCTION()
+	void OnOverlapEnd(UPrimitiveComponent* overLappedComp, AActor* otherActor, 
+					  UPrimitiveComponent* otherComp, int32 otherBodyIndex);
 };

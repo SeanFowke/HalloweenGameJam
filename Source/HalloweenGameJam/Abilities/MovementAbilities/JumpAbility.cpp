@@ -24,13 +24,13 @@ void UJumpAbility::Invoke()
 
 void UJumpAbility::BeginPlay()
 {
-	UMovementAbilitiesBase::BeginPlay();
+	Super::BeginPlay();
 	SetOrigValue(GetPlayerCharacter()->GetCharacterMovement()->JumpZVelocity);
-	GetPlayerCharacter()->AddAbility(this);
+	SetName("Jump Ability");
 }
 
 void UJumpAbility::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
-	UMovementAbilitiesBase::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 }

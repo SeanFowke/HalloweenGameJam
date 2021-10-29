@@ -5,14 +5,15 @@ UDefenceAbility::UDefenceAbility():UPassiveAbilitiesBase() {}
 
 void UDefenceAbility::BeginPlay()
 {
-	UPassiveAbilitiesBase::BeginPlay();
+	Super::BeginPlay();
 	SetOrigStat(GetPlayerCharacter()->GetDefenceStat());
 	SetStatMultiplyer(75.0f);
+	SetName("Defence Ability");
 }
 
 void UDefenceAbility::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
-	UPassiveAbilitiesBase::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	Invoke();
 }
 

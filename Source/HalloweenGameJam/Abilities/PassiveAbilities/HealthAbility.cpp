@@ -10,14 +10,15 @@ UHealthAbility::UHealthAbility() :UPassiveAbilitiesBase() {
 
 void UHealthAbility::BeginPlay()
 {
-	UPassiveAbilitiesBase::BeginPlay();
+	Super::BeginPlay();
 	SetOrigStat(GetPlayerCharacter()->GetHealthStat());
 	SetStatMultiplyer(75.0f);
+	SetName("Health Ability");
 }
 
 void UHealthAbility::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
-	UPassiveAbilitiesBase::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	Invoke();
 }
 

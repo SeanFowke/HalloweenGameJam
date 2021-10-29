@@ -5,38 +5,32 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "AbilitiesBase.h"
-#include "PassiveAbilitiesBase.generated.h"
+#include "CombatAbilitiesBase.generated.h"
 
-
-UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
-class HALLOWEENGAMEJAM_API UPassiveAbilitiesBase : public UAbilitiesBase
+/**
+ * 
+ */
+UCLASS()
+class HALLOWEENGAMEJAM_API UCombatAbilitiesBase : public UAbilitiesBase
 {
 	GENERATED_BODY()
-private:
+
 	float originalStat;
 	float statMultiplyer; // Should never be equal to or above 100
-	
-
 
 public:
-	// Sets default values for this component's properties
-	UPassiveAbilitiesBase();
 
+	UCombatAbilitiesBase();
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-	virtual void Invoke() override;	
-	
-	
+	virtual void Invoke() override;
 
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
-
 	void SetOrigStat(float value);
 	float GetOrigStat();
 
 	void SetStatMultiplyer(float value);
-	int GetStatMultiplyer();
-
-	
+	float GetStatMultiplyer();
 
 };
