@@ -6,6 +6,9 @@
 #include "Components/InputComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "FirstPersonCharacter.h"
+
 
 AHalloweenGameJamCharacter::AHalloweenGameJamCharacter()
 {
@@ -45,6 +48,38 @@ AHalloweenGameJamCharacter::AHalloweenGameJamCharacter()
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
 }
 
+void AHalloweenGameJamCharacter::SetFirstPersonRef(AFirstPersonCharacter* character_)
+{
+	fpsRef = character_;
+}
+
+void AHalloweenGameJamCharacter::FocusOnActor(AActor* focus_, float rate_)
+{
+	FViewTargetTransitionParams transitionParams;
+	transitionParams.BlendTime = rate_;
+
+	if (cameraManager)
+	{
+		cameraManager->SetViewTarget(focus_, transitionParams);
+	}
+}
+
+APlayerCameraManager* AHalloweenGameJamCharacter::GetCameraManager()
+{
+	return cameraManager;
+}
+
+AFirstPersonCharacter* AHalloweenGameJamCharacter::getFpsCharacter()
+{
+	if (fpsRef)
+	{
+		return fpsRef;
+	}
+
+
+	return nullptr;
+}
+
 //////////////////////////////////////////////////////////////////////////
 // Input
 
@@ -57,6 +92,21 @@ void AHalloweenGameJamCharacter::SetupPlayerInputComponent(class UInputComponent
 
 	PlayerInputComponent->BindTouch(IE_Pressed, this, &AHalloweenGameJamCharacter::TouchStarted);
 	PlayerInputComponent->BindTouch(IE_Released, this, &AHalloweenGameJamCharacter::TouchStopped);
+}
+
+void AHalloweenGameJamCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	cameraManager = Cast<APlayerCameraManager>(UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0));
+
+	AFirstPersonCharacter* fpsRefTemp = Cast<AFirstPersonCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+
+	if (fpsRefTemp)
+	{
+		fpsRef = fpsRefTemp;
+		fpsRef->SetSideScrollerRef(this);
+	}
 }
 
 void AHalloweenGameJamCharacter::MoveRight(float Value)
