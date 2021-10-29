@@ -56,7 +56,7 @@ void AFirstPersonCharacter::SetTVRef(ATelevisionActor* tv_)
 
 AHalloweenGameJamCharacter* AFirstPersonCharacter::GetSideScrollerRef()
 {
-	return nullptr;
+	return sideScrollerRef;
 }
 
 // Called when the game starts or when spawned
