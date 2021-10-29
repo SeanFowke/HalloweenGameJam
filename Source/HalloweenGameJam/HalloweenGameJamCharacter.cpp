@@ -132,11 +132,6 @@ void AHalloweenGameJamCharacter::SetupPlayerInputComponent(class UInputComponent
 void AHalloweenGameJamCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-}
-
-void AHalloweenGameJamCharacter::BeginPlay()
-{
-	Super::BeginPlay();
 
 	cameraManager = Cast<APlayerCameraManager>(UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0));
 
@@ -232,10 +227,10 @@ APlayerController* AHalloweenGameJamCharacter::GetPlyController()
 
 
 
-void AHalloweenGameJamCharacter::AddAbility(UAbilitiesBase* ability)
-{
-	playerAbilities.Add(ability);
-}
+//void AHalloweenGameJamCharacter::AddAbility(UAbilitiesBase* ability)
+//{
+//	playerAbilities.Add(ability);
+//}
 
 TArray<UAbilitiesBase*> AHalloweenGameJamCharacter::GetAbilities()
 {

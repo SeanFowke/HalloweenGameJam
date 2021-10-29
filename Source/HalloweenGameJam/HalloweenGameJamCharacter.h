@@ -64,7 +64,6 @@ protected:
 
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
-	virtual void BeginPlay()override;
 
 	UPROPERTY(VisibleAnywhere)
 	float defenceStat;
@@ -89,7 +88,7 @@ public:
 
 	APlayerController* GetPlyController();
 
-	void AddAbility(UAbilitiesBase* ability);
+	//void AddAbility(UAbilitiesBase* ability);
 	TArray<UAbilitiesBase*> GetAbilities();
 	UAbilitiesBase* GetAbility(TArray<UAbilitiesBase*> abilityArray_,FString name_);
 
@@ -107,6 +106,7 @@ public:
 	APlayerCameraManager* GetCameraManager();
 
 	class AFirstPersonCharacter* getFpsCharacter();
+
 	inline void AddAbility(UAbilitiesBase* ability) { playerAbilities.Add(ability); }
 	UFUNCTION()
 	void OnOverlapBegin(UPrimitiveComponent* OverLappedComp, AActor* otherActor, UPrimitiveComponent* otherComp,
