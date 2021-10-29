@@ -126,7 +126,7 @@ void AHalloweenGameJamCharacter::SetupPlayerInputComponent(class UInputComponent
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AHalloweenGameJamCharacter::Interact);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AHalloweenGameJamCharacter::MoveRight);
-	
+	PlayerInputComponent->BindAction("Exit", IE_Pressed, this, &AHalloweenGameJamCharacter::ExitTVView);
 }
 
 void AHalloweenGameJamCharacter::BeginPlay()
@@ -142,6 +142,8 @@ void AHalloweenGameJamCharacter::BeginPlay()
 		fpsRef = fpsRefTemp;
 		fpsRef->SetSideScrollerRef(this);
 	}
+
+	GetWorld()->GetTimerManager().SetTimer(delayedBeginPlay, this, &AHalloweenGameJamCharacter::ExitTVView, 0.1f, false);
 }
 
 void AHalloweenGameJamCharacter::MoveRight(float Value)
@@ -213,16 +215,27 @@ float AHalloweenGameJamCharacter::GetHealthStat()
 	return healthStat;
 }
 
+void AHalloweenGameJamCharacter::ExitTVView()
+{
+	if (fpsRef)
+	{
+		GetPlyController()->Possess(fpsRef);
+		GetPlyController()->ClientSetCameraFade(true, FColor::Black, FVector2D(1.5f, 0.0f), 2.0f);
+		GetPlyController()->SetViewTargetWithBlend(fpsRef, 0.45f);
+	}
+}
+
 APlayerController* AHalloweenGameJamCharacter::GetPlyController()
 {
-	if (APawn* pawn = Cast<APawn>(this)) {
-		
-		if (APlayerController* PC = Cast<APlayerController>(pawn->GetController())) {
-			return PC;
-		}
-		else { return nullptr; }
+	
+	APlayerController* controller = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+
+	if (controller)
+	{
+		return controller;
 	}
-	else { return nullptr; }
+
+	return nullptr;
 }
 
 

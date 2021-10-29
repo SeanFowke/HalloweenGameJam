@@ -72,6 +72,17 @@ void AFirstPersonCharacter::BeginPlay()
 	controller = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 	controller->bAutoManageActiveCameraTarget = false;
 	
+
+	AHalloweenGameJamCharacter* sideScroller = Cast<AHalloweenGameJamCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	if (sideScroller)
+	{
+		SetSideScrollerRef(sideScroller);
+		sideScroller->SetFirstPersonRef(this);
+	}
+	else
+	{
+		sideScroller = nullptr;
+	}
 }
 
 // Called every frame

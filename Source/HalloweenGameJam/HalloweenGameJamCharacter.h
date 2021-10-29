@@ -53,6 +53,8 @@ class AHalloweenGameJamCharacter : public ACharacter
 	UPROPERTY(VisibleAnywhere)
 	bool interactableInRange;
 
+	FTimerHandle delayedBeginPlay;
+
 protected:
 
 	/** Called for side to side input */
@@ -85,6 +87,8 @@ public:
 
 	void SetHealthStat(float value);
 	float GetHealthStat();
+
+	void ExitTVView();
 
 	APlayerController* GetPlyController();
 
