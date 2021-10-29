@@ -18,7 +18,7 @@ UMoveAbility::UMoveAbility() :UMovementAbilitiesBase()
 // Called when the game starts
 void UMoveAbility::BeginPlay()
 {
-	UMovementAbilitiesBase::BeginPlay();
+	Super::BeginPlay();
 	SetOrigValue(GetPlayerCharacter()->GetCharacterMovement()->MaxWalkSpeed);
 	SetName("Move Ability");
 
@@ -28,7 +28,7 @@ void UMoveAbility::BeginPlay()
 // Called every frame
 void UMoveAbility::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
-	UMovementAbilitiesBase::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 }
 

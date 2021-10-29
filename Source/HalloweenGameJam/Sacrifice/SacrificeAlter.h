@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "../Interactable.h"
 #include "Components/WidgetComponent.h"
+#include "Components/TextBlock.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/SphereComponent.h"
 #include "SacrificeAlter.generated.h"
@@ -27,11 +28,13 @@ class HALLOWEENGAMEJAM_API ASacrificeAlter : public AInteractable
 	//number of combat abilities
 	int numOfComAbl;
 
-	TArray<class UAbilitiesBase*> activeAbilities;
-	TArray<class UAbilitiesBase*> deactiveAbilities;
+
 
 	UPROPERTY(VisibleAnywhere)
-	TArray<class UAbilitiesBase*> allAbilities;
+	TArray<class UAbilitiesBase*> activeAbilities;
+
+	UPROPERTY(VisibleAnywhere)
+	TArray<class UAbilitiesBase*> inactiveAbilities;
 
 	
 public:	
@@ -42,7 +45,10 @@ public:
 	virtual void OpenUI() override;
 
 	void SetActiveAbilites();
+	void SetInactiveAbilites();
 
+	UPROPERTY(VisibleAnywhere)
+	TArray<class UAbilitiesBase*> allAbilities;
 	
 
 
@@ -56,16 +62,42 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Mesh)
 	UStaticMeshComponent* alterMesh;
 
-	class UMovmentAbilitiesBase* equipedMoveAbility;
-	class UPassiveAbilitiesBase* equipedPassiveAbility;
-	class UCombatAbilitiesBase*  equipedCombatAbility;
+	// equipped Abilities
+	UPROPERTY(VisibleAnywhere)
+	class UMovementAbilitiesBase* eMoveAbility;
+
+	UPROPERTY(VisibleAnywhere)
+	class UPassiveAbilitiesBase* ePassiveAbility;
+
+	UPROPERTY(VisibleAnywhere)
+	class UCombatAbilitiesBase* eCombatAbility;
+
+	void removeAbility(FString abilityName_);
 
 
 public:	
  // UI Functions
 
 	UFUNCTION(BlueprintCallable)
-		void SetActiveAbilitiesText(FString movementAby, FString passiveAby, FString combatAby);
+		FString SetMoveAbilityText(/*FString movementAby, FString passiveAby, FString combatAby*/);
+
+	UFUNCTION(BlueprintCallable)
+		FString SetPassAbilityText(/*FString movementAby, FString passiveAby, FString combatAby*/);
+
+	UFUNCTION(BlueprintCallable)
+		FString SetCombAbilityText(/*FString movementAby, FString passiveAby, FString combatAby*/);
+
+	UFUNCTION(BlueprintCallable)
+		void SetMovementButtons(TArray<UTextBlock*> buttonTxt);
+
+	UFUNCTION(BlueprintCallable)
+		void SetPassiveButtons(TArray<UTextBlock*> buttonTxt);
+
+	UFUNCTION(BlueprintCallable)
+		void SetCombatButtons(TArray<UTextBlock*> buttonTxt);
+
+	UFUNCTION(BlueprintCallable)
+		void OnButtonClicked(UTextBlock* buttonTxt);
 	
 	
 

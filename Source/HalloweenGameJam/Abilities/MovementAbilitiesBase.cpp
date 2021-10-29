@@ -13,7 +13,7 @@ UMovementAbilitiesBase::UMovementAbilitiesBase():UAbilitiesBase(){}
 // Called when the game starts
 void UMovementAbilitiesBase::BeginPlay()
 {
-	UAbilitiesBase::BeginPlay();
+	Super::BeginPlay();
 
 	// ...
 
@@ -23,7 +23,7 @@ void UMovementAbilitiesBase::BeginPlay()
 // Called every frame
 void UMovementAbilitiesBase::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
-	UAbilitiesBase::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
 }

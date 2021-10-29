@@ -9,7 +9,7 @@
 #include "Abilities/MovementAbilities/MoveAbility.h"
 #include "Abilities/PassiveAbilities/DefenceAbility.h"
 #include "Abilities/PassiveAbilities/HealthAbility.h"
-//#include "Abilities/CombatAbilities/AttackAbility.h"
+#include "Abilities/CombatAbilities/AttackAbility.h"
 #include "HalloweenGameJamCharacter.generated.h"
 
 
@@ -38,8 +38,8 @@ class AHalloweenGameJamCharacter : public ACharacter
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Ability, meta = (AllowPrivateAccess = "true"))
 	class UHealthAbility* healthAbility;
 
-	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Ability, meta = (AllowPrivateAccess = "true"))
-	//class UAttackAbility* attackAbility;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Ability, meta = (AllowPrivateAccess = "true"))
+	class UAttackAbility* attackAbility;
 	
 	UPROPERTY(VisibleAnywhere)
 	TArray<UAbilitiesBase*> playerAbilities;
@@ -58,10 +58,13 @@ protected:
 	/** Called for side to side input */
 	void MoveRight(float Val);
 	void PlayerJump();
-	void Interact();
+	void Interact(); 
+	float moveY;
+	bool canJump;
 
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
+	virtual void BeginPlay()override;
 
 	UPROPERTY(VisibleAnywhere)
 	float defenceStat;
@@ -79,8 +82,11 @@ public:
 	void SetHealthStat(float value);
 	float GetHealthStat();
 
+	APlayerController* GetPlyController();
+
 	void AddAbility(UAbilitiesBase* ability);
 	TArray<UAbilitiesBase*> GetAbilities();
+	UAbilitiesBase* GetAbility(TArray<UAbilitiesBase*> abilityArray_,FString name_);
 
 	bool GetIsInteracting();
 

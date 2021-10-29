@@ -10,7 +10,7 @@ UPassiveAbilitiesBase::UPassiveAbilitiesBase():UAbilitiesBase(){}
 // Called when the game starts
 void UPassiveAbilitiesBase::BeginPlay()
 {
-	UAbilitiesBase::BeginPlay();
+	Super::BeginPlay();
 
 }
 
@@ -38,7 +38,7 @@ int UPassiveAbilitiesBase::GetStatMultiplyer()
 // Called every frame
 void UPassiveAbilitiesBase::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
-	UAbilitiesBase::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
 }

@@ -7,7 +7,7 @@ UCombatAbilitiesBase::UCombatAbilitiesBase(){}
 
 void UCombatAbilitiesBase::BeginPlay()
 {
-	UAbilitiesBase::BeginPlay();
+	Super::BeginPlay();
 
 }
 
@@ -38,7 +38,7 @@ float UCombatAbilitiesBase::GetStatMultiplyer()
 // Called every frame
 void UCombatAbilitiesBase::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
-	UAbilitiesBase::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
 }

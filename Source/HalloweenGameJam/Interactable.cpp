@@ -48,7 +48,7 @@ void AInteractable::OpenUI() {
 
 FString AInteractable::GetName()
 {
-	return FString();
+	return name;
 }
 
 

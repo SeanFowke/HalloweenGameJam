@@ -36,7 +36,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime);
 	bool GetInRange() { return playerInRange; }
-	FString GetName(); 
+	FString GetName();
 	virtual void OpenUI();
 	AHalloweenGameJamCharacter* GetPlayerCharacter();
 
