@@ -43,6 +43,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = UI)
 	UWidgetComponent* sacrificeUI;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = UI)
+	UWidgetComponent* confirmationUI;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Mesh)
 	UStaticMeshComponent* alterMesh;
 
@@ -50,7 +53,7 @@ protected:
 	class UAbilitiesBase* oldSwapAbility;
 
 
-	void removeAbility(TArray<UAbilitiesBase*> abilityArray, FString abilityName_);
+	TArray<UAbilitiesBase*> removeAbility(TArray<UAbilitiesBase*> abilityArray, FString abilityName_);
 
 
 public:	
@@ -63,10 +66,20 @@ public:
 		void OldSwapAbility(UTextBlock* textBox);
 
 	UFUNCTION(BlueprintCallable)
-		void OkButton();
+		void SacUIOkButton();	  // used for the sacrifice UI 
+
+	UFUNCTION(BlueprintCallable)
+		void ConUIOkButton();	  // used for the confirmation UI 
 
 	UFUNCTION(BlueprintCallable)
 		void CancelButton();
+
+	UFUNCTION(BlueprintCallable)
+		void GetNewAblName(UTextBlock* Txt);
+
+	UFUNCTION(BlueprintCallable)
+		void GetOldAblName(UTextBlock* Txt);
+
 	
 
 };

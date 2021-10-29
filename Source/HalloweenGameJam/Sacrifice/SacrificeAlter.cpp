@@ -14,6 +14,7 @@ ASacrificeAlter::ASacrificeAlter()
 
 	alterMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("AlterMesh"));
 	sacrificeUI = CreateDefaultSubobject<UWidgetComponent>(TEXT("SacrificeUI"));
+	confirmationUI = CreateDefaultSubobject<UWidgetComponent>(TEXT("ConfrimationUI"));
 
 
 }
@@ -24,6 +25,7 @@ void ASacrificeAlter::BeginPlay()
 	AInteractable::BeginPlay();
 	SetName("Sacrifice Alter");
     sacrificeUI->GetUserWidgetObject()->AddToViewport();
+	confirmationUI->GetUserWidgetObject()->AddToViewport();
 }
 
 // Called every frame
@@ -31,13 +33,16 @@ void ASacrificeAlter::Tick(float DeltaTime)
 {
 	AInteractable::Tick(DeltaTime);
 	sacrificeUI->SetVisibility(false);
+	confirmationUI->SetVisibility(false);
 
 	if (GetPlayerCharacter()->GetIsInteracting()) {
 		sacrificeUI->GetUserWidgetObject()->SetVisibility(ESlateVisibility::Visible);
 		GetPlayerCharacter()->GetPlyController()->SetShowMouseCursor(true); 
 	}
+
 	else {
 		sacrificeUI->GetUserWidgetObject()->SetVisibility(ESlateVisibility::Hidden);
+		confirmationUI->GetUserWidgetObject()->SetVisibility(ESlateVisibility::Hidden);
 		GetPlayerCharacter()->GetPlyController()->SetShowMouseCursor(false);
 		newSwapAbility = nullptr;
 		oldSwapAbility = nullptr;
@@ -83,7 +88,7 @@ void ASacrificeAlter::SetInactiveAbilites()
 	}
 }
 
-void ASacrificeAlter::removeAbility(TArray<UAbilitiesBase*> abilityArray,FString abilityName_)
+TArray<UAbilitiesBase*> ASacrificeAlter::removeAbility(TArray<UAbilitiesBase*> abilityArray,FString abilityName_)
 {
 	UAbilitiesBase* toRemove;
 	for (int i = 0; i < abilityArray.Num(); ++i) {
@@ -94,6 +99,9 @@ void ASacrificeAlter::removeAbility(TArray<UAbilitiesBase*> abilityArray,FString
 	}
 
 	abilityArray.Remove(toRemove);
+
+	return abilityArray;
+	
 }
 
 void ASacrificeAlter::SetNewAbility(UTextBlock* textBox)
@@ -114,14 +122,19 @@ void ASacrificeAlter::OldSwapAbility(UTextBlock* textBox)
 	}
 }
 
-void ASacrificeAlter::OkButton()
+void ASacrificeAlter::SacUIOkButton()
+{
+	confirmationUI->GetUserWidgetObject()->SetVisibility(ESlateVisibility::Visible);
+}
+
+void ASacrificeAlter::ConUIOkButton()
 {
 	if (oldSwapAbility && newSwapAbility) {
 
-		removeAbility(inactiveAbilities,newSwapAbility->GetName());
-		activeAbilities.Add(newSwapAbility);
+		inactiveAbilities = removeAbility(inactiveAbilities, newSwapAbility->GetName());
+		activeAbilities = removeAbility(activeAbilities, oldSwapAbility->GetName());
 
-		removeAbility(activeAbilities, oldSwapAbility->GetName());
+		activeAbilities.Add(newSwapAbility);
 		inactiveAbilities.Add(oldSwapAbility);
 
 		oldSwapAbility->SetIsActivated(false);
@@ -139,3 +152,12 @@ void ASacrificeAlter::CancelButton()
 	GetPlayerCharacter()->SetIsInterActing(false);
 }
 
+void ASacrificeAlter::GetNewAblName(UTextBlock* Txt)
+{
+	Txt->SetText(FText::FromString(newSwapAbility->GetName()));
+}
+
+void ASacrificeAlter::GetOldAblName(UTextBlock* Txt)
+{
+	Txt->SetText(FText::FromString(oldSwapAbility->GetName()));
+}
