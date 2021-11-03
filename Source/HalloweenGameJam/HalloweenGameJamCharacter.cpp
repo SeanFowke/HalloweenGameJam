@@ -119,10 +119,13 @@ AFirstPersonCharacter* AHalloweenGameJamCharacter::getFpsCharacter()
 //////////////////////////////////////////////////////////////////////////
 // Input
 
+
 void AHalloweenGameJamCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
 	// set up gameplay key bindings
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AHalloweenGameJamCharacter::PlayerJump);
+	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AHalloweenGameJamCharacter::PlayerBoost);
+	PlayerInputComponent->BindAction("Jump", IE_Released, this, &AHalloweenGameJamCharacter::ExitJumpBoost);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AHalloweenGameJamCharacter::Interact);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AHalloweenGameJamCharacter::MoveRight);
@@ -149,13 +152,32 @@ void AHalloweenGameJamCharacter::BeginPlay()
 void AHalloweenGameJamCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
 	if (isInteracting) {
 		canJump = false;
 		moveY = 0.0f;
 	}
+
 	else {
 		canJump = true;
 		moveY = -1.0f;
+	}
+
+	if (!GetIsJumping()) {
+		isJumpBoost = false;
+	}
+}
+
+bool AHalloweenGameJamCharacter::GetIsJumping()
+{
+	if (GetCharacterMovement()->IsMovingOnGround()) {
+		isJumping = false;
+		return isJumping; 
+	}
+
+	else {
+		isJumping = true;
+		return isJumping;
 	}
 }
 
@@ -163,9 +185,15 @@ void AHalloweenGameJamCharacter::MoveRight(float Value)
 {
 	AddMovementInput(FVector(0.f, moveY, 0.f), Value);
 }
+
+void AHalloweenGameJamCharacter::ExitJumpBoost()
+{
+	isJumpBoost = false;
+}
+
 void AHalloweenGameJamCharacter::PlayerJump() {
 
-	if (canJump) {
+	if (canJump && !GetIsJumping()) {
 		ACharacter::Jump();
 	}
 }
@@ -174,15 +202,29 @@ void AHalloweenGameJamCharacter::Interact()
 {
 	if (interactableInRange && !isInteracting) {
 		isInteracting = true;
-		
 	}
 
 	else {
 		isInteracting = false;
+	}
+}
+
+void AHalloweenGameJamCharacter::PlayerBoost()
+{
+
+	if (jumpAbility->GetIsActivated()) {
+	
+		if (GetIsJumping() && jumpAbility->GetBoostPower() > 0.f) {
+			isJumpBoost = true;
+		}
+
+		else if (GetIsJumping() && jumpAbility->GetBoostPower() <= 0.f){
+			isJumpBoost = false; 
+		}
+
+
 		
 	}
-
-	
 }
 
 void AHalloweenGameJamCharacter::OnOverlapBegin(UPrimitiveComponent* OverLappedComp, AActor* otherActor, UPrimitiveComponent* otherComp, int32 otherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -240,7 +282,6 @@ void AHalloweenGameJamCharacter::ExitTVView()
 
 APlayerController* AHalloweenGameJamCharacter::GetPlyController()
 {
-	
 	APlayerController* controller = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 
 	if (controller)
@@ -250,13 +291,6 @@ APlayerController* AHalloweenGameJamCharacter::GetPlyController()
 
 	return nullptr;
 }
-
-
-
-//void AHalloweenGameJamCharacter::AddAbility(UAbilitiesBase* ability)
-//{
-//	playerAbilities.Add(ability);
-//}
 
 TArray<UAbilitiesBase*> AHalloweenGameJamCharacter::GetAbilities()
 {
@@ -273,8 +307,6 @@ UAbilitiesBase* AHalloweenGameJamCharacter::GetAbility(TArray<UAbilitiesBase*> a
 
 	return nullptr;
 }
-
-
 
 bool AHalloweenGameJamCharacter::GetIsInteracting()
 {

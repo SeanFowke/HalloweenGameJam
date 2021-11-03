@@ -22,6 +22,10 @@ void UAbilitiesBase::BeginPlay()
 {
 	Super::BeginPlay();
 	GetPlayerCharacter()->AddAbility(this);
+
+	if (isActivated) {
+		Invoke();
+	}
 	// ...
 	
 }

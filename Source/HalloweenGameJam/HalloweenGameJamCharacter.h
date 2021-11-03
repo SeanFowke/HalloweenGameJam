@@ -53,7 +53,17 @@ class AHalloweenGameJamCharacter : public ACharacter
 	UPROPERTY(VisibleAnywhere)
 	bool interactableInRange;
 
+	UPROPERTY(VisibleAnywhere)
+	bool isJumpBoost;
+
+	UPROPERTY(VisibleAnywhere)
+	bool isJumping;
+
 	FTimerHandle delayedBeginPlay;
+
+	void ExitJumpBoost();
+
+
 
 protected:
 
@@ -61,6 +71,7 @@ protected:
 	void MoveRight(float Val);
 	void PlayerJump();
 	void Interact(); 
+	void PlayerBoost();
 	float moveY;
 	bool canJump;
 
@@ -72,6 +83,8 @@ protected:
 
 	UPROPERTY(VisibleAnywhere)
 	float healthStat;
+
+
 
 	virtual void BeginPlay();
 	virtual void Tick(float DeltaTime);
@@ -114,7 +127,12 @@ public:
 
 	class AFirstPersonCharacter* getFpsCharacter();
 
+	bool GetIsJumping();
+
 	inline void AddAbility(UAbilitiesBase* ability) { playerAbilities.Add(ability); }
+	inline bool GetIsBoostJumping() { return isJumpBoost; }
+	inline void SetIsBoostJumping(bool isBoosting_) { isJumpBoost = isBoosting_; }
+
 	UFUNCTION()
 	void OnOverlapBegin(UPrimitiveComponent* OverLappedComp, AActor* otherActor, UPrimitiveComponent* otherComp,
 						int32 otherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);

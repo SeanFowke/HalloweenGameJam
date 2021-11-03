@@ -12,6 +12,10 @@ class HALLOWEENGAMEJAM_API UMoveAbility : public UMovementAbilitiesBase
 {
 	GENERATED_BODY()
 
+	float oriGroundFric;
+	float oriDeAccel;
+
+
 public:
 	// Sets default values for this component's properties
 	UMoveAbility();

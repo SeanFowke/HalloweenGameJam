@@ -6,6 +6,12 @@
 #include "MovementAbilitiesBase.generated.h"
 
 
+/*
+* /////TODO/////
+* 
+* Add a Description variable and a setter for it 
+* 
+*/
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class HALLOWEENGAMEJAM_API UMovementAbilitiesBase : public UAbilitiesBase

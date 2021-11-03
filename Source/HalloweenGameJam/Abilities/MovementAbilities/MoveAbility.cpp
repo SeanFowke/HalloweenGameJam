@@ -19,6 +19,8 @@ UMoveAbility::UMoveAbility() :UMovementAbilitiesBase()
 void UMoveAbility::BeginPlay()
 {
 	Super::BeginPlay();
+	oriDeAccel = GetPlayerCharacter()->GetCharacterMovement()->BrakingDecelerationWalking;
+	oriGroundFric = GetPlayerCharacter()->GetCharacterMovement()->GroundFriction;
 	SetOrigValue(GetPlayerCharacter()->GetCharacterMovement()->MaxWalkSpeed);
 	SetName("Move Ability");
 
@@ -36,10 +38,14 @@ void UMoveAbility::Invoke()
 {
 	if (GetIsActivated()) {
 		GetPlayerCharacter()->GetCharacterMovement()->MaxWalkSpeed = 1200.0f;
+		GetPlayerCharacter()->GetCharacterMovement()->BrakingDecelerationWalking = 500.0f;
+		GetPlayerCharacter()->GetCharacterMovement()->GroundFriction = 0.0f;
 	}
 
 	else {
 		GetPlayerCharacter()->GetCharacterMovement()->MaxWalkSpeed = GetOrigValue();
+		GetPlayerCharacter()->GetCharacterMovement()->BrakingDecelerationWalking = oriDeAccel;
+		GetPlayerCharacter()->GetCharacterMovement()->GroundFriction = oriGroundFric;
 	}
 }
 
