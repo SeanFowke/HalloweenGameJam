@@ -42,9 +42,6 @@ void AInteractable::Tick(float DeltaTime)
 	
 }
 
-void AInteractable::OpenUI() {
-
-}
 
 FString AInteractable::GetName()
 {

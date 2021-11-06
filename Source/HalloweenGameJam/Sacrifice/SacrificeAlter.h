@@ -11,6 +11,14 @@
 #include "Components/SphereComponent.h"
 #include "SacrificeAlter.generated.h"
 
+
+
+/*
+* TODO:
+* Change so that it can handle when the player has no abilities 
+* when the player enters for the first time 3 random abilities will be given 
+*/
+
 UCLASS()
 class HALLOWEENGAMEJAM_API ASacrificeAlter : public AInteractable
 {
@@ -22,16 +30,22 @@ class HALLOWEENGAMEJAM_API ASacrificeAlter : public AInteractable
 	UPROPERTY(VisibleAnywhere)
 	TArray<class UAbilitiesBase*> inactiveAbilities;
 
+	bool noActiveAbilities;
+
+	//used when the player clicks ok on the new UI and agrees to the 3 random abilities given 
+	bool OkClickedNewUI; 
+
 	
 public:	
 	// Sets default values for this actor's properties
 	ASacrificeAlter();
 	virtual void Tick(float DeltaTime) override;
 	virtual void Interact() override;
-	virtual void OpenUI() override;
 
 	void SetActiveAbilites();
 	void SetInactiveAbilites();
+
+	void SetRandStarterAbl(); // sets the 3 random starter abilities 
 
 	UPROPERTY(VisibleAnywhere)
 	TArray<class UAbilitiesBase*> allAbilities;
@@ -46,12 +60,21 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = UI)
 	UWidgetComponent* confirmationUI;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = UI)
+	UWidgetComponent* newAbilityUI;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Mesh)
 	UStaticMeshComponent* alterMesh;
+
 
 	class UAbilitiesBase* newSwapAbility;
 	class UAbilitiesBase* oldSwapAbility;
 
+
+	// 3 Random Abilities
+	class UAbilitiesBase* randAbl_0;
+	class UAbilitiesBase* randAbl_1;
+	class UAbilitiesBase* randAbl_2;
 
 	TArray<UAbilitiesBase*> removeAbility(TArray<UAbilitiesBase*> abilityArray, FString abilityName_);
 
@@ -60,25 +83,37 @@ public:
  // UI Functions
 
 	UFUNCTION(BlueprintCallable)
-		void SetNewAbility(UTextBlock* textBox/*description at some point*/);
+	void SetNewAbility(UTextBlock* textBox/*description at some point*/);
 
 	UFUNCTION(BlueprintCallable)
-		void OldSwapAbility(UTextBlock* textBox);
+	void OldSwapAbility(UTextBlock* textBox);
 
 	UFUNCTION(BlueprintCallable)
-		void SacUIOkButton();	  // used for the sacrifice UI 
+	void SacUIOkButton();	  // used for the sacrifice UI 
 
 	UFUNCTION(BlueprintCallable)
-		void ConUIOkButton();	  // used for the confirmation UI 
+	void ConUIOkButton();	  // used for the confirmation UI 
 
 	UFUNCTION(BlueprintCallable)
-		void CancelButton();
+	void CancelButton();
 
 	UFUNCTION(BlueprintCallable)
-		void GetNewAblName(UTextBlock* Txt);
+	void NewUIOkButton();	  // used for the New Ability UI 
 
 	UFUNCTION(BlueprintCallable)
-		void GetOldAblName(UTextBlock* Txt);
+	void GetNewAblName(UTextBlock* Txt);
+
+	UFUNCTION(BlueprintCallable)
+	void GetOldAblName(UTextBlock* Txt);
+
+	UFUNCTION(BlueprintCallable)
+	void RandAbl0(UTextBlock* textBox);
+
+	UFUNCTION(BlueprintCallable)
+	void RandAbl1(UTextBlock* textBox);
+
+	UFUNCTION(BlueprintCallable)
+	void RandAbl2(UTextBlock* textBox);
 
 	
 

@@ -37,7 +37,6 @@ public:
 	virtual void Tick(float DeltaTime);
 	bool GetInRange() { return playerInRange; }
 	FString GetName();
-	virtual void OpenUI();
 	AHalloweenGameJamCharacter* GetPlayerCharacter();
 
 };
